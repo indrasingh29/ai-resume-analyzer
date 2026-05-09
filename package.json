@@ -1,0 +1,27 @@
+{
+  "name": "ai-resume-analyzer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready AI Resume Analyzer with Next.js, Node.js, MongoDB, and Tailwind CSS.",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @resume-analyzer/api\" \"npm run dev -w @resume-analyzer/web\"",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "start": "concurrently \"npm run start -w @resume-analyzer/api\" \"npm run start -w @resume-analyzer/web\"",
+    "deploy:compose": "docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build",
+    "deploy:compose:down": "docker compose -f docker-compose.prod.yml down"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "define-data-property": "^1.1.4",
+    "has-property-descriptors": "^1.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
