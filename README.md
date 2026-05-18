@@ -48,6 +48,8 @@ A production-ready full-stack resume analysis platform for uploading PDF resumes
 |       |-- tailwind.config.ts
 |       `-- tsconfig.json
 |-- .dockerignore
+|-- .devcontainer
+|-- .env.codespaces.example
 |-- .env.example
 |-- .env.production.example
 |-- .gitignore
@@ -63,7 +65,10 @@ A production-ready full-stack resume analysis platform for uploading PDF resumes
 
 - `apps/api`: Express API, MongoDB models, auth middleware, PDF parsing, ATS scoring, and dashboard endpoints.
 - `apps/web`: Next.js frontend, authentication screens, dashboard UI, upload workflow, and API client.
+- `.devcontainer/devcontainer.json`: GitHub Codespaces and Dev Containers configuration.
+- `.devcontainer/docker-compose.yml`: Codespaces app container plus MongoDB sidecar service.
 - `.vscode/tasks.json`: VS Code tasks for running the full stack, frontend, API, and verification commands.
+- `.env.codespaces.example`: Safe Codespaces environment template. Codespaces copies this to `.env` automatically.
 - `.env.example`: Safe development environment template. Copy this to `.env`.
 - `.env.production.example`: Safe production environment template. Copy this to `.env.production` for deployment.
 - `.gitignore`: Keeps dependencies, builds, logs, uploads, and local secrets out of Git.
@@ -131,6 +136,56 @@ npm run dev
    - `Verify project`
 
 The full stack task requires MongoDB to be running first.
+
+## Run in GitHub Codespaces
+
+This project is ready for a browser-based VS Code workflow through GitHub Codespaces.
+
+### 1. Push the repository to GitHub
+
+Create a GitHub repository, add it as `origin`, and push `main`:
+
+```bash
+git remote add origin https://github.com/USERNAME/ai-resume-analyzer.git
+git push -u origin main
+```
+
+### 2. Create a Codespace
+
+1. Open the repository on GitHub.
+2. Click `Code`.
+3. Open the `Codespaces` tab.
+4. Click `Create codespace on main`.
+
+GitHub will read `.devcontainer/devcontainer.json`, start the Node.js development container, start the MongoDB sidecar, install dependencies, and copy `.env.codespaces.example` to `.env`.
+
+### 3. Run the full stack
+
+In the Codespaces terminal:
+
+```bash
+npm run dev
+```
+
+Ports are configured automatically:
+
+- `3000`: Next.js frontend
+- `4000`: Express API
+- `27017`: MongoDB sidecar
+
+Open the forwarded `3000` port to use the app in your browser. API calls use `/api` through the Next.js rewrite, so the browser does not need a separate backend URL.
+
+### 4. Codespaces environment
+
+Codespaces uses these development values:
+
+```text
+MONGODB_URI=mongodb://mongo:27017/ai_resume_analyzer
+NEXT_PUBLIC_API_URL=/api
+API_INTERNAL_URL=http://localhost:4000
+```
+
+Do not commit real secrets. `.env` remains ignored by Git.
 
 ## Verification
 

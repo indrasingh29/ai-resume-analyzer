@@ -1,0 +1,38 @@
+{
+  "name": "AI Resume Analyzer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/ai-resume-analyzer",
+  "remoteUser": "node",
+  "postCreateCommand": "npm install && cp -n .env.codespaces.example .env || true",
+  "postAttachCommand": "echo 'Codespace ready. Run: npm run dev'",
+  "forwardPorts": [3000, 4000, 27017],
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js frontend",
+      "onAutoForward": "openPreview"
+    },
+    "4000": {
+      "label": "Express API",
+      "onAutoForward": "notify"
+    },
+    "27017": {
+      "label": "MongoDB",
+      "onAutoForward": "ignore"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "mongodb.mongodb-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  }
+}
