@@ -7,7 +7,7 @@ services:
     buildCommand: npm ci && npm run build -w @resume-analyzer/api
     startCommand: npm run start -w @resume-analyzer/api
     healthCheckPath: /health
-    autoDeploy: commit
+    autoDeploy: true
     envVars:
       - key: NODE_VERSION
         value: 20.19.0
@@ -37,7 +37,7 @@ services:
     region: singapore
     buildCommand: npm ci && npm run build -w @resume-analyzer/web
     startCommand: npm run start:render -w @resume-analyzer/web
-    autoDeploy: commit
+    autoDeploy: true
     envVars:
       - key: NODE_VERSION
         value: 20.19.0
