@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: ai-resume-analyzer-api
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci && npm run build -w @resume-analyzer/api
+    startCommand: npm run start -w @resume-analyzer/api
+    healthCheckPath: /health
+    autoDeploy: commit
+    envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLIENT_ORIGIN
+        value: https://ai-resume-analyzer-web.onrender.com
+      - key: MAX_UPLOAD_MB
+        value: 5
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+    buildFilter:
+      paths:
+        - apps/api/**
+        - package.json
+        - package-lock.json
+        - tsconfig.base.json
+
+  - type: web
+    name: ai-resume-analyzer-web
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm ci && npm run build -w @resume-analyzer/web
+    startCommand: npm run start:render -w @resume-analyzer/web
+    autoDeploy: commit
+    envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
+      - key: NEXT_PUBLIC_API_URL
+        value: /api
+      - key: API_INTERNAL_HOSTPORT
+        fromService:
+          type: web
+          name: ai-resume-analyzer-api
+          property: hostport
+    buildFilter:
+      paths:
+        - apps/web/**
+        - package.json
+        - package-lock.json
+        - tsconfig.base.json

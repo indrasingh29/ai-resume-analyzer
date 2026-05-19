@@ -203,6 +203,98 @@ What each command does:
 - `npm run lint`: checks code quality with ESLint.
 - `npm run build`: creates production builds for both workspaces.
 
+## Deploy on Render
+
+This repository includes `render.yaml`, so Render can create both production services from the GitHub repo:
+
+- `ai-resume-analyzer-api`: Express API web service
+- `ai-resume-analyzer-web`: Next.js web service
+
+Render does not provide a native MongoDB database service, so use MongoDB Atlas for production data.
+
+### 1. Create a MongoDB Atlas database
+
+1. Go to `https://cloud.mongodb.com`.
+2. Create a free cluster.
+3. Create a database user with a strong password.
+4. In Network Access, allow Render to connect. For a portfolio demo, `0.0.0.0/0` is the simplest option. For stricter production use, restrict by provider/network policy.
+5. Copy the connection string and set the database name to `ai_resume_analyzer`.
+
+Example format:
+
+```text
+mongodb+srv://USERNAME:PASSWORD@cluster-name.mongodb.net/ai_resume_analyzer?retryWrites=true&w=majority
+```
+
+Do not commit this value.
+
+### 2. Deploy from GitHub to Render
+
+1. Push the latest code to GitHub.
+2. Open `https://dashboard.render.com`.
+3. Click `New +`.
+4. Choose `Blueprint`.
+5. Connect the GitHub repository.
+6. Render detects `render.yaml`.
+7. When prompted for environment variables, provide:
+   - `MONGODB_URI`: your MongoDB Atlas connection string
+8. Deploy the Blueprint.
+
+The frontend service uses `NEXT_PUBLIC_API_URL=/api` and proxies requests to the API service over Render's private service networking.
+If you want OpenAI-generated questions instead of the built-in deterministic generator, add `OPENAI_API_KEY` to the API service environment later and redeploy.
+
+### 3. Confirm the live app
+
+After deploy, open:
+
+```text
+https://ai-resume-analyzer-web.onrender.com
+```
+
+Also check the API health endpoint:
+
+```text
+https://ai-resume-analyzer-api.onrender.com/health
+```
+
+If Render gives a different frontend URL, update `CLIENT_ORIGIN` on the API service to match the actual frontend origin and redeploy the API.
+
+### 4. LinkedIn-ready demo checklist
+
+- Create one demo account.
+- Upload a sample PDF resume.
+- Confirm ATS score, keyword gaps, strengths, improvements, and interview questions display correctly.
+- Open the dashboard and confirm the saved analysis appears.
+- Use the frontend Render URL as the project link on LinkedIn.
+
+## Accessing Data
+
+The app stores production data in MongoDB Atlas through `MONGODB_URI`.
+
+Main collections:
+
+- `users`: registered user accounts with hashed passwords
+- `resumeanalyses`: saved resume analysis results, ATS scores, extracted text preview, and interview questions
+
+Ways to view the data:
+
+- In the app: open the dashboard after logging in.
+- In MongoDB Atlas: open the cluster, click `Browse Collections`, then select the `ai_resume_analyzer` database.
+- In MongoDB Compass: connect with the same Atlas URI.
+- Locally with Docker:
+
+```bash
+docker exec -it ai-resume-analyzer-mongo mongosh ai_resume_analyzer
+```
+
+Useful local MongoDB commands:
+
+```javascript
+show collections
+db.users.find().pretty()
+db.resumeanalyses.find().pretty()
+```
+
 ## Git Setup Commands
 
 Use these commands when preparing the repository from scratch.

@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+const apiInternalUrl =
+  process.env.API_INTERNAL_URL ||
+  (process.env.API_INTERNAL_HOSTPORT
+    ? `http://${process.env.API_INTERNAL_HOSTPORT}`
+    : "http://localhost:4000");
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -6,7 +12,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.API_INTERNAL_URL || "http://localhost:4000"}/api/:path*`
+        destination: `${apiInternalUrl}/api/:path*`
       }
     ];
   }
