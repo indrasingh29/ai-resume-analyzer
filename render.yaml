@@ -18,7 +18,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: CLIENT_ORIGIN
-        value: https://ai-resume-analyzer-web.onrender.com
+        value: https://ai-resume-analyzer-web-usrb.onrender.com
       - key: MAX_UPLOAD_MB
         value: 5
       - key: OPENAI_MODEL
@@ -42,12 +42,7 @@ services:
       - key: NODE_VERSION
         value: 20.19.0
       - key: NEXT_PUBLIC_API_URL
-        value: /api
-      - key: API_INTERNAL_HOSTPORT
-        fromService:
-          type: web
-          name: ai-resume-analyzer-api
-          property: hostport
+        value: https://ai-resume-analyzer-api-8u78.onrender.com/api
     buildFilter:
       paths:
         - apps/web/**

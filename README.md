@@ -240,7 +240,7 @@ Do not commit this value.
    - `MONGODB_URI`: your MongoDB Atlas connection string
 8. Deploy the Blueprint.
 
-The frontend service uses `NEXT_PUBLIC_API_URL=/api` and proxies requests to the API service over Render's private service networking.
+The frontend service uses `NEXT_PUBLIC_API_URL` to call the API service.
 If you want OpenAI-generated questions instead of the built-in deterministic generator, add `OPENAI_API_KEY` to the API service environment later and redeploy.
 
 ### 3. Confirm the live app
@@ -248,13 +248,13 @@ If you want OpenAI-generated questions instead of the built-in deterministic gen
 After deploy, open:
 
 ```text
-https://ai-resume-analyzer-web.onrender.com
+https://ai-resume-analyzer-web-usrb.onrender.com
 ```
 
 Also check the API health endpoint:
 
 ```text
-https://ai-resume-analyzer-api.onrender.com/health
+https://ai-resume-analyzer-api-8u78.onrender.com/health
 ```
 
 If Render gives a different frontend URL, update `CLIENT_ORIGIN` on the API service to match the actual frontend origin and redeploy the API.
