@@ -42,7 +42,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}) 
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetchWithRetry(`${API_URL}${path}`, {
     ...options,
     headers
   });
@@ -65,6 +65,35 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}) 
   }
 
   return (await response.json()) as T;
+}
+
+async function fetchWithRetry(url: string, init: RequestInit) {
+  const delays = [1500, 3500];
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= delays.length; attempt += 1) {
+    try {
+      return await fetch(url, init);
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < delays.length) {
+        await wait(delays[attempt] ?? 0);
+      }
+    }
+  }
+
+  throw new Error(
+    lastError instanceof Error && lastError.message !== "Failed to fetch"
+      ? lastError.message
+      : "API is waking up or temporarily unreachable. Please wait a few seconds and try again."
+  );
+}
+
+function wait(milliseconds: number) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, milliseconds);
+  });
 }
 
 export const api = {
