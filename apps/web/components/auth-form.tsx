@@ -115,6 +115,14 @@ export function AuthForm({ mode }: AuthFormProps) {
                 />
               </span>
             </label>
+
+            {!isRegister ? (
+              <div className="text-right text-sm">
+                <Link href="/forgot-password" className="font-semibold text-mint hover:text-teal-800">
+                  Forgot password?
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           {error ? (

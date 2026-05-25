@@ -1,4 +1,11 @@
-import type { AuthResponse, DashboardSummary, ResumeAnalysis, User } from "./types";
+import type {
+  AuthResponse,
+  DashboardSummary,
+  ForgotPasswordResponse,
+  ResetPasswordResponse,
+  ResumeAnalysis,
+  User
+} from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 const TOKEN_KEY = "resume_analyzer_token";
@@ -70,6 +77,20 @@ export const api = {
   },
   login(input: { email: string; password: string }) {
     return apiRequest<AuthResponse>("/auth/login", {
+      method: "POST",
+      auth: false,
+      body: JSON.stringify(input)
+    });
+  },
+  requestPasswordReset(input: { email: string }) {
+    return apiRequest<ForgotPasswordResponse>("/auth/forgot-password", {
+      method: "POST",
+      auth: false,
+      body: JSON.stringify(input)
+    });
+  },
+  resetPassword(input: { token: string; password: string }) {
+    return apiRequest<ResetPasswordResponse>("/auth/reset-password", {
       method: "POST",
       auth: false,
       body: JSON.stringify(input)

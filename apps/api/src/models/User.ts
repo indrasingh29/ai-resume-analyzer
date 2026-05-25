@@ -4,6 +4,8 @@ export type User = {
   name: string;
   email: string;
   passwordHash: string;
+  passwordResetTokenHash?: string;
+  passwordResetExpiresAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -29,6 +31,15 @@ const userSchema = new Schema<User>(
     passwordHash: {
       type: String,
       required: true,
+      select: false
+    },
+    passwordResetTokenHash: {
+      type: String,
+      select: false,
+      index: true
+    },
+    passwordResetExpiresAt: {
+      type: Date,
       select: false
     }
   },

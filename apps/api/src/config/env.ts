@@ -13,6 +13,8 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default("7d"),
   CLIENT_ORIGIN: z.string().default("http://localhost:3000"),
   MAX_UPLOAD_MB: z.coerce.number().positive().default(5),
+  PASSWORD_RESET_RESPONSE_MODE: z.enum(["inline", "generic"]).default("inline"),
+  PASSWORD_RESET_TOKEN_TTL_MINUTES: z.coerce.number().int().positive().default(30),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().optional()
 });
@@ -34,5 +36,6 @@ if (
 export const env = {
   ...parsed.data,
   MAX_UPLOAD_BYTES: parsed.data.MAX_UPLOAD_MB * 1024 * 1024,
+  PASSWORD_RESET_TOKEN_TTL_MS: parsed.data.PASSWORD_RESET_TOKEN_TTL_MINUTES * 60 * 1000,
   CLIENT_ORIGINS: parsed.data.CLIENT_ORIGIN.split(",").map((origin) => origin.trim())
 };

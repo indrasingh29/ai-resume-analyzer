@@ -21,6 +21,10 @@ services:
         value: https://ai-resume-analyzer-web-usrb.onrender.com
       - key: MAX_UPLOAD_MB
         value: 5
+      - key: PASSWORD_RESET_RESPONSE_MODE
+        value: inline
+      - key: PASSWORD_RESET_TOKEN_TTL_MINUTES
+        value: 30
       - key: OPENAI_MODEL
         value: gpt-4o-mini
     buildFilter:

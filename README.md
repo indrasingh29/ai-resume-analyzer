@@ -5,6 +5,7 @@ A production-ready full-stack resume analysis platform for uploading PDF resumes
 ## Features
 
 - JWT user authentication
+- Forgot password and reset password flow
 - Resume PDF upload and text extraction
 - ATS score analysis with keyword, structure, impact, contact, and readability scoring
 - AI-ready interview question generation with a deterministic local fallback
@@ -242,6 +243,7 @@ Do not commit this value.
 
 The frontend service uses `NEXT_PUBLIC_API_URL` to call the API service.
 If you want OpenAI-generated questions instead of the built-in deterministic generator, add `OPENAI_API_KEY` to the API service environment later and redeploy.
+For the LinkedIn demo, `PASSWORD_RESET_RESPONSE_MODE=inline` returns a reset link on the forgot-password screen. For a private production app, switch this to `generic` after adding an email provider.
 
 ### 3. Confirm the live app
 
@@ -412,8 +414,9 @@ Only example files such as `.env.example` and `.env.production.example` should b
    ```text
    JWT_SECRET=use_a_long_random_secret_here
    CLIENT_ORIGIN=https://your-domain.com
-   NEXT_PUBLIC_API_URL=/api
-   API_INTERNAL_URL=http://api:4000
+   PASSWORD_RESET_RESPONSE_MODE=inline
+   PASSWORD_RESET_TOKEN_TTL_MINUTES=30
+   NEXT_PUBLIC_API_URL=https://your-api-domain.com/api
    ```
 
 3. Start the production stack:
@@ -433,6 +436,8 @@ Only example files such as `.env.example` and `.env.production.example` should b
 - `GET /health`
 - `POST /api/auth/register`
 - `POST /api/auth/login`
+- `POST /api/auth/forgot-password`
+- `POST /api/auth/reset-password`
 - `GET /api/auth/me`
 - `POST /api/resumes/analyze`
 - `GET /api/resumes`

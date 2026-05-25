@@ -50,3 +50,12 @@ export type AuthResponse = {
   user: User;
   token: string;
 };
+
+export type ForgotPasswordResponse = {
+  message: string;
+  resetUrl?: string;
+};
+
+export type ResetPasswordResponse = {
+  message: string;
+};
